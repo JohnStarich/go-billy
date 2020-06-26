@@ -5,21 +5,21 @@ package osfs
 import (
 	"os"
 
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 func (f *file) Lock() error {
 	f.m.Lock()
 	defer f.m.Unlock()
 
-	return unix.Flock(int(f.File.Fd()), unix.LOCK_EX)
+	return syscall.Flock(int(f.File.Fd()), syscall.LOCK_EX)
 }
 
 func (f *file) Unlock() error {
 	f.m.Lock()
 	defer f.m.Unlock()
 
-	return unix.Flock(int(f.File.Fd()), unix.LOCK_UN)
+	return syscall.Flock(int(f.File.Fd()), syscall.LOCK_UN)
 }
 
 func rename(from, to string) error {
